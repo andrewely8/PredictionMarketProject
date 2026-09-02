@@ -1,0 +1,17 @@
+The page: https://docs.kalshi.com/getting_started/quick_start_websockets described how to setup a web socket connection in python. Following this tutorial and making some slight changes, the program ./WebSocketsTutorial.py takes a list of market tickers, and constructs a file tracking the order book of those markets for the duration that the program is ran. 
+
+This allows us to construct a high resolution snapshot of the orderbook over a markets lifespan. If we can collect this data for many different sports games, we can construct a historical database that has order book information. Kalshi's historical public database has limited data, not including the order book.
+
+This historical database will allow us to implement strategies and "back test" them, rather than having to run tests during live events.
+
+Notes:
+ - how deep of an order book do we want to take? Only the top most price / best price, or do we want to consider a deeper depth?
+ - how can we store the data in the most efficent way possible?
+ - 
+
+
+--DATA COLLECTION LOG--  
+
+"DATE RECORDED","CATEGORY","EVENT","MARKETS TRACKED","STARTED TRACKING","FINISHED TRACKING","NOTE"
+"9/1/2026","MLB","NY Yankees vs LA Angels","6","~3 min before","~3 min after","tracked win/loss and 2.5/3.5 spreads ~10:01pm crashed, started again at ~10:11pm"
+"","","","","","",""

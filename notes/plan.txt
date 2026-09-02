@@ -1,0 +1,54 @@
+OBJECTIVE
+main goal: Implement strategies in code to preform trades on prediction markets like Kalshi and Polymarket with accurate risk assessment determining if these strategies are actually executed for profitability. 
+
+motivation: Platforms like Kalshi and Polymarket have seemingly inviting usage for automated trading execution. With prediction markets emerging, maybe there are opportunities for research into profitable strategies, whereas stock markets are already highly explored, and sports betting apps do not allow such trading behavior. 
+
+other notes:
+-It is of course very hard and perhaps unrealistic to expect a profitable strategy to be developed, so the project is more of a learning exercise with the intention of researching potential strategies rather than expecting to actually implement one fully.
+-Additionally, the main expectation of this project is simply to have completed a project -- including trying to learn cpp, and have a financial facing project that I can showcase. 
+-A truly novel strategy may not be necessary, there exists papers already covering this type of idea (automated trading on prediction markets). The project should be focused on a research-based approach. If we read a paper, implement that paper in practice, and observe the results of the implementation, that will be a success. If we happen to come up some unique aspects along the way, then we can branch into our own type of "research" area.
+-I want the project to be very well documented, hence this right up. Framing this as sort of full assignment, well thought out project, rather than starting something with no clear end goal with a sort of sandbox approach. Having clear tasks to complete, and assessments of completing those tasks along the way. 
+-I am willing to risk at least $100 on actual contracts on the polymarkets so the project should at least attempt real execution, unless we have hard evidence that our strategies will fail.
+
+
+
+
+
+PLAN
+
+The following will inherently need to be revised as the project develops, since research phase is going to uncover much more information. The following tasks may not be done chronologically, but a chronological / to-do list construction should be developed at some point.
+
+1) Research:
+    Read papers published about prediction markets and developing strategies for trading on them. Record detailed notes and understanding of the papers as well as needed underlying concepts (outside of prediction markets, may need info about general finance, stock markets, or pure math). Be sure to understand the papers / theory / technical aspects of the strategies. Also reddit posts, discord, youtube, and people online in general already have some stories about this type of project. Be sure to take those into consideration to avoid mistakes. At this point, it is okay to use AI to ask for paper summaries, brainstorm, and ensure clear understanding, and for research purposes in general.
+
+2) collect data:
+    We should be able to pull large amounts of data from the predictions markets to prototype locally without needing constant API calls to these sites.
+    SEE FILE: dataCollection.Notes.txt FOR DETAILS ON THIS STEP	
+
+3) prototype (with) data:
+   In a freeze-frame of data, can we implement hypothetically profitable strategies that are intuitive, or straightforward in the perfect environment of instant feedback / order placements . Can we gain insights about data that don't necessarily require immediate action, such as finding historical trends. If we can work with freeze - frame, static data, the project can already gain substance since most theoretical sources seem to assume such hypothetically perfect environments anyway.
+
+2) workflow configuration / API's:
+    We need to be able to interact with the prediction markets in an efficient way, including fetching data and placing orders. I want to be able to write cpp code at some point in the project. However, since I am most experienced with Python and this is my first time writing cpp, the idea is: prototype in python, and then try translating or converting to cpp. Also, we can have python code that invokes cpp code. If Python handles the actual data retrieval, cpp can then preform the calculations faster, and python runs only non time sensitive tasks. We can also include in our technical analysis a performance assessment between using python or cpp for a specific task if we ever do translations from python into cpp.
+
+3) Implementations:
+    We need to implement algorithms and strategies that achieve our goals, adhering to the research we've done and refined plan we develop. We should be careful not to have the project bloated by technical analysis papers or documents like this, the actual code we have should be a large portion of the project. As a first goal, I think we should have implementations of the arbitrate and black-Scholes prediction on a prototype data freeze frames, and then at least an attempt to have it be applied to the real market.
+
+4) user interface application:
+   Someone should be able to access the project in a non technical view-point, either on the web or simple download and run. The application should allow the user to visualize all the things we have like potential arbs or potential misprices, or potential contracts that are attractive to buy. It should be possible for the user to have a simulated environment with no real money attached, where actual execution may require them to have access to the source code to add their API key (We will decide how to portray the app if it ends up being largely hypothetical then of course just show charts and stuff, if its somewhat profitable then allow real usage or something). 
+
+
+
+
+
+OUTPUT
+
+- An application / system / series of programs that implements some type of trading or analysis on prediction markets.
+- A technical document that outlines the project, like going over this plan, and the papers research, and theory of the project. this can be like a research - paper type of draft.
+- An application with a User Interface that wraps / packages the project and can be deployed either on the web or as a single program that can be ran locally, but look nice to a user.
+
+
+
+
+AI USAGE ACKNOWLEDGEMENT
+I plan to not vibe-code, or use code augmenting AI tools at all for this project. A part of the project is to write cpp programs, which I am still in early stages of learning. For that reason, I will not want AI to write cpp code for me. In general, I will limit my usage of AI as much as possible, while consulting it when stuck for a while, or at certain stages like during design phases for opinions. For example, one way I can think of using AI productively would be after typing up this text document with the plan, ask AI if it is a good plan. However I do not want to ask things like: "the plan is ...., write a python file that does this".
