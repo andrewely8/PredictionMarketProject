@@ -7,11 +7,20 @@ This historical database will allow us to implement strategies and "back test" t
 Notes:
  - how deep of an order book do we want to take? Only the top most price / best price, or do we want to consider a deeper depth?
  - how can we store the data in the most efficent way possible?
- - 
+ - this phase of data collection does not necessarily need to be optimized for data collection speed, but in a realtime data collection pipeline that we will be trying to react to, optimizing could reduce reaction latency. Maybe instead of subscribing to many markets, we only subscribe to one at a time and run many processes concurrently one for each market ticker. This is something to experiment with.
+- we can use stfp to get files from other machines (MacBook, oldPC), so we can use those machines to run the data collection tasks while working on main pc.
 
 
 --DATA COLLECTION LOG--  
 
 "DATE RECORDED","CATEGORY","EVENT","MARKETS TRACKED","STARTED TRACKING","FINISHED TRACKING","NOTE"
 "9/1/2026","MLB","NY Yankees vs LA Angels","6","~3 min before","~3 min after","tracked win/loss and 2.5/3.5 spreads ~10:01pm crashed, started again at ~10:11pm"
-"","","","","","",""
+"9/2/2026","MLB","Milwaukee vs Chicago C","6","~5 min after"," ~3 min after","tracked win/loss and 2.5/3.5 spreads, did not start tracking until 5 mins into game"
+"9/2/2026","MLB","Detroit vs Minnesota","6","~5 min after"," ~3 min after","tracked win/loss and 2.5/3.5 spreads, did not start tracking until 5 mins into game"
+"9/2/2026","MLB","Miami vs Kansas City","6","~5 min after","~3 min after","tracked win/loss and 2.5/3.5 spreads, did not start tracking until 5 mins into game"
+"9/2/2026","MLB","Chicago WS vs Houston","6","~3 min before"," ~3 min after","tracked win/loss and 2.5/3.5 spreads"
+"9/2/2026","MLB","St. Louis vs Los Angeles D","6","~3 min before"," ~3 min after","tracked win/loss and 2.5/3.5 spreads, ~30 second stoppage from accidental cancel"
+"9/3/2026","MLB","San Francisco vs Pittsburgh","6","~3 min before"," ~13 min after","tracked win/loss and 2.5/3.5 spreads"
+"9/5/2026","MLB","San Francisco vs New York M","6","~3 min before"," ~3 min after","tracked win/loss and 2.5/3.5 spreads"
+"9/5/2026","MLB","Chicago C vs Miami","6","~3 min before"," ~6 min after","tracked win/loss and 2.5/3.5 spreads"
+"9/5/2026","MLB","New York Y vs San Diego","6","~15 min before"," ~3 min after","tracked win/loss and 2.5/3.5 spreads"

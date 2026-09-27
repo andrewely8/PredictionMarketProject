@@ -170,47 +170,35 @@ async def connect(ws_url, auth_headers,market_tickers):
             await websocket.send(json.dumps(subscribe_msg))
 
         # Process messages
-        with open(f"KXMLBGAME-26SEP012138NYYLAA-NYY.jsonl", "a", encoding="utf-8") as f:
+        with open(f"KXMLBGAME-26SEP022210STLLAD-LAD.jsonl", "a", encoding="utf-8") as f:
             async for message in websocket:
-
-                # Raw message is already JSON text.
                 f.write(message + "\n")
 
-                data = json.loads(message)
-
-                if data.get("type") == "orderbook_delta":
-                    msg = data["msg"]
-
-                    # print(
-                    #     msg["market_ticker"],
-                    #     msg["side"],
-                    #     msg["price_dollars"],
-                    #     msg["delta_fp"],
-                    #     msg["ts_ms"]
-                    # )
 
 
+if __name__ == "__main__":
+    
+    MODE = "production"
+    API_KEY_ID_PATH = "./secret/keys.json"
+    MARKET_TICKERS = [  "KXMLBGAME-26SEP022210STLLAD-LAD",
+                        "KXMLBGAME-26SEP022210STLLAD-STL",
+                        "KXMLBSPREAD-26SEP022210STLLAD-LAD2",
+                        "KXMLBSPREAD-26SEP022210STLLAD-LAD3",
+                        "KXMLBSPREAD-26SEP022210STLLAD-STL2",
+                        "KXMLBSPREAD-26SEP022210STLLAD-STL3"]
 
-MODE = "production"
-API_KEY_ID_PATH = "./secret/keys.json"
-MARKET_TICKERS = [  "KXMLBGAME-26SEP012138NYYLAA-NYY",
-                    "KXMLBGAME-26SEP012138NYYLAA-LAA",
-                    "KXMLBSPREAD-26SEP012138NYYLAA-NYY2",
-                    "KXMLBSPREAD-26SEP012138NYYLAA-NYY3",
-                    "KXMLBSPREAD-26SEP012138NYYLAA-LAA2",
-                    "KXMLBSPREAD-26SEP012138NYYLAA-LAA3"]
 
-# WebSocket URL
-if MODE == "production":
-    ws_url = "wss://external-api-ws.kalshi.com/trade-api/ws/v2" 
-elif MODE == "demo":
-    ws_url = "wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2"
+    # WebSocket URL
+    if MODE == "production":
+        ws_url = "wss://external-api-ws.kalshi.com/trade-api/ws/v2" 
+    elif MODE == "demo":
+        ws_url = "wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2"
 
-api_key_id = load_api_key(API_KEY_ID_PATH, MODE)
-private_key = load_private_key(MODE)
+    api_key_id = load_api_key(API_KEY_ID_PATH, MODE)
+    private_key = load_private_key(MODE)
 
-timestamp = str(int(time.time() * 1000))
-generated_auth_headers = create_headers(api_key_id, private_key, timestamp, "GET", "/trade-api/ws/v2")
+    timestamp = str(int(time.time() * 1000))
+    generated_auth_headers = create_headers(api_key_id, private_key, timestamp, "GET", "/trade-api/ws/v2")
 
-# Run the connection
-asyncio.run(connect(ws_url, generated_auth_headers, MARKET_TICKERS))
+    # Run the connection
+    asyncio.run(connect(ws_url, generated_auth_headers, MARKET_TICKERS))

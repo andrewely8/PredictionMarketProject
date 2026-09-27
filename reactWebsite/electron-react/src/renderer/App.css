@@ -1,0 +1,178 @@
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://vite.dev/guide/features.html#css
+ */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: white;
+
+}
+
+
+button {
+  font-family: "Segoe UI";
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  appearance: none;
+  font-size: 14px;
+  user-select: none; 
+}
+
+button:hover {
+  background-color: rgba(100, 100, 100, 0.14);
+  transition: all ease-in 0.15s;
+}
+
+
+.topMenu {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.entireCanvas {
+  flex: 1;
+  background-color: rgba(114, 120, 126, 1);
+}
+
+
+.verticalSeperator {
+  width: 4px;
+  margin-left: -2px;
+  margin-right: -2px;
+  margin-top: 36px;
+  cursor: col-resize;
+  display: flex;
+  justify-content: center;
+  background: transparent;
+}
+
+.verticalSeperator::before {
+  content: "";
+  width: 4px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.16);
+  transition: all 120ms ease;
+}
+
+.verticalSeperator:hover::before {
+  width: 6px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.verticalSeperator:active::before {
+  width: 3px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.horizontalSeperator {
+  height: 4px;
+  margin-bottom: -2px;
+  cursor: col-resize;
+  display: flex;
+  justify-content: center;
+  background: rgba(48, 56, 65, 1);
+}
+
+.horizontalSeperator::before {
+  content: "";
+  height: 4px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.16);
+  transition: all 120ms ease;
+}
+
+.horizontalSeperator:hover::before {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.horizontalSeperator:active::before {
+  height: 3px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+
+
+
+.panel {
+  height: 100%;
+  background-color: rgba(48, 56, 65, 1);
+}
+
+.panelTitle {
+  width: 120px;
+  padding: 2px;
+  font-family: "Segoe UI";
+  font-size: 16px;
+  color: white;
+  border-style: solid;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-color: rgba(48, 56, 65, 1);
+  background-color: rgba(48, 56, 65, 1);
+  user-select: none; 
+}
+
+.panelTitleContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(114, 120, 126, 1);
+  padding-top: 2px;
+
+}
+
+.MarketTrackerInteriorContainer {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background-color: rgba(48, 56, 65, 1);
+  padding-left: 5px;
+}
+
+
+
+
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border-radius: 3px;
+  
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 2px;
+  padding-left: 20px;
+  font-size: 14px;
+  text-decoration: none;
+  display: block;
+  font-family: "Segoe UI";
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+  border-radius: 3px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
