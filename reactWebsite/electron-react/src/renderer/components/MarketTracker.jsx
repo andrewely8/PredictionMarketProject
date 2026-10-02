@@ -38,7 +38,6 @@ function EventTrackForm() {
 
   async function chooseDirectory() {
     const directory = await window.electronAPI.selectDirectory();
-
     if (directory) {
       setSaveDirPath(directory)
       console.log(saveDirPath);

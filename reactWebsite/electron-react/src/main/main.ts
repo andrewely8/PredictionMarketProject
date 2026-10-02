@@ -10,12 +10,14 @@
  */
 import path from 'path';
 import fs from 'fs';
+import readline from 'readline';
 import { spawn } from "child_process";
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import log from 'electron-log';
-import MenuBuilder from './menu';
+import MenuBuilder from './menu'; 
 import { resolveHtmlPath } from './util';
 import startAutoUpdates from './updates';
+import Backtester from './backtest';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -147,6 +149,58 @@ ipcMain.handle("read-directory", async (_, dirPath) => {
 
 
 
+let filePath = '';
+let dataArray = [];
+let backtest: Backtester;
+
+ipcMain.handle("read-json-file", async (_, newFilePath) => {
+  dataArray = []; // Reset dataArray to empty before pushing onto it.
+  if (newFilePath.substr(newFilePath.length-4) === "null") {
+    console.log("no file path to load");
+    return null;
+  }
+  
+  filePath = newFilePath;
+  
+  const rl = readline.createInterface({
+    input: fs.createReadStream(newFilePath),
+    crlfDelay: Infinity
+  });
+
+  rl.on('line', (line) => {
+    if (line.trim() !== '') {
+      dataArray.push(JSON.parse(line));
+    }
+  });
+
+  const initialBooks = await new Promise((resolve, reject) => {
+    rl.on('close', async () => {
+      try {
+        backtest = new Backtester(dataArray);
+        const books = backtest.getTopOrderbooks();
+        resolve(books);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+
+  return initialBooks;
+});
+
+
+
+ipcMain.handle("process-tick", async (_, tick) => {
+  // console.log(file);
+  // return "successful process-tick function call";
+
+
+
+});
+
+
+
+
 let pythonProcess: ReturnType<typeof spawn> | null = null;
 
 function startPython() {
@@ -183,6 +237,13 @@ ipcMain.on("python-message", (_, message) => {
 });
 
 
+ipcMain.handle("open-devtools", async () => {
+  mainWindow.webContents.openDevTools()
+});
+
+
+
+
 app
   .whenReady()
   .then(async () => {
@@ -193,5 +254,6 @@ app
   })
   .catch((error: unknown) => {
     reportWindowError(error);
+
     app.quit();
   });

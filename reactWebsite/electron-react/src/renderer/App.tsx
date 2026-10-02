@@ -6,12 +6,14 @@ import MarketTracker from './components/MarketTracker.jsx';
 import Workspace from './components/Workspace.jsx';
 import Replayer from './components/Replayer.jsx';
 import icon from '../../assets/icon.svg';
+import { GlobalProvider } from "./contexts/GlobalContext.tsx";
 import './App.css';
 
 
 function Hello() {
   const [marketTrackerActive, setMarketTrackerActive] = useState(true)
   return (
+    <GlobalProvider>
     <div className = "topMenu">
       <CustomMenu/>
       <div className = "entireCanvas">
@@ -28,6 +30,7 @@ function Hello() {
         </Group>
       </div>
     </div>
+    </GlobalProvider>
   );
 }
 

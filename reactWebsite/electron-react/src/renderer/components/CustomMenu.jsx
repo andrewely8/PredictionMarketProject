@@ -1,14 +1,13 @@
-
 import '../App.css';
 
 
-
+//
 function MenuButton({buttonLabel, buttonOptions}) {
   return (
     <div className="dropdown">
-      <button>{buttonLabel}</button>
+      <button >{buttonLabel}</button>
       <div className = "dropdown-content">
-        {buttonOptions.map((opt, i) => (<a href="#" key={i}>{opt}</a>))}
+        {buttonOptions.map((opt, i) => (<a onClick = {() => {window.electronAPI.openDevtools()}} href="#" key={i}>{opt}</a>))}
       </div>
     </div>
   );
@@ -25,7 +24,7 @@ export default function CustomMenu() {
         buttonOptions={["Market Tracker", "Workspace", "Replayer"]}/>
       <MenuButton 
         buttonLabel={"Help"} 
-        buttonOptions={["Option 1", "Option 2", "Option 3"]}/>
+        buttonOptions={["Open devtools", "Open devtools", "Open devtools"]}/>
     </div>
   );
 }

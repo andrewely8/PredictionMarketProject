@@ -8,7 +8,7 @@
 body {
   margin: 0;
   background-color: white;
-
+  user-select: none;
 }
 
 
@@ -19,7 +19,6 @@ button {
   border-radius: 10px;
   appearance: none;
   font-size: 14px;
-  user-select: none; 
 }
 
 button:hover {
@@ -118,7 +117,6 @@ button:hover {
   border-top-right-radius: 10px;
   border-color: rgba(48, 56, 65, 1);
   background-color: rgba(48, 56, 65, 1);
-  user-select: none; 
 }
 
 .panelTitleContainer {
@@ -175,4 +173,9 @@ button:hover {
   display: block;
 }
 
-
+.fileListItem {
+  color: white;
+  font-family: "Segoe UI";
+  font-size: 14px;
+  padding: 5px;
+}

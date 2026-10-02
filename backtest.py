@@ -39,8 +39,8 @@ class MlbGame():
 		elif not numberMarkets:
 			print(f"number of markets not specified, found {len(self.marketsTracked)} markets tracked\n")
 		
-		self.AbsoluteTrackStartTime = self.data[i]['msg']['ts_ms']
-		self.AbsoluteTrackEndTime = self.data[-1]['msg']['ts_ms'] - self.AbsoluteTrackStartTime
+		self.absoluteTrackStartTime = self.data[i]['msg']['ts_ms']
+		self.absoluteTrackEndTime = self.data[-1]['msg']['ts_ms'] - self.absoluteTrackStartTime
 		self.currentTime = 0
 		self.currentDataIdx = i
 		
@@ -130,7 +130,7 @@ class MlbGame():
 
 
 	def checkEvent(self,time):
-		while time >= (self.data[self.currentDataIdx]["msg"]["ts_ms"]-self.AbsoluteTrackStartTime):
+		while time >= (self.data[self.currentDataIdx]["msg"]["ts_ms"]-self.absoluteTrackStartTime):
 			self.updateOrderbook(self.data[self.currentDataIdx])
 			self.currentDataIdx += 1
 

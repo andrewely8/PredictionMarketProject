@@ -71,7 +71,8 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-resizable-panels": "^4.13.3",
-    "react-router-dom": "^7.18.4"
+    "react-router-dom": "^7.18.4",
+    "react-timer-hook": "^4.0.6"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.2.0",
@@ -210,5 +211,12 @@
     "node": ">=24.0.0",
     "npm": ">=10.0.0"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "@swc/core@1.16.2": true,
+    "electron-winstaller@5.4.0": true,
+    "unrs-resolver@1.12.2": true,
+    "esbuild": false
+  }
 }
