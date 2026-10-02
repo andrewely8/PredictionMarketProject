@@ -50,7 +50,7 @@ type orderbook = {
 	no_dollars_fp: [string,string][];
 }
 
-type topBook = {
+export type topBook = {
 	best_yes_bid_dollars: string;
 	best_yes_bid_volume: string; 
 	best_yes_ask_dollars: string; 
@@ -80,18 +80,20 @@ function bigIntToDecimal(value: bigint, decimals: number): string {
 
 
 
-export default class Backtester {
+export class Backtester {
   dataArray: orderbookEvent[];
   numMarkets: number;
   currentIndex: number;
   orderbooks: Map<string, orderbook>;
   tickers: string[];
   timeOffset: number;
+  currentTime: number;
 
   constructor(dataArray: orderbookEvent[], numMarkets?: number) {
     this.dataArray = dataArray;
     this.orderbooks = new Map();
     this.tickers = [];
+    this.currentTime = 0;
 
     if (this.dataArray[0].type !== "subscribed") {
     	throw new Error("expected first data entry to be of subscribed type");
@@ -125,7 +127,6 @@ export default class Backtester {
   			})
   			this.currentIndex += 1;
     	}
-    	console.log(`numMarkets not specified, detected ${this.currentIndex-1} markets`);
     }
 
     this.timeOffset = this.dataArray[this.currentIndex].msg.ts_ms
@@ -160,8 +161,8 @@ export default class Backtester {
   	return topOfBook;
   }
 
-  getTopOrderbooks(): Map<string,topBook> {
 
+  getTopOrderbooks(): Map<string,topBook> {
   	const topOfBooks = new Map();
 
   	for (let i=0; i < this.tickers.length; i++) {
@@ -172,6 +173,90 @@ export default class Backtester {
   	return topOfBooks;
   }
 
+
+  setCurrentTime(currentTime: number) {
+  	this.currentTime = currentTime;
+  }
+
+
+  updateOrderbook(newEvent: orderbookEvent) {
+  	const msg = newEvent.msg;
+  	const tkr = msg.market_ticker;
+  	const side = msg.side;
+		const price_changed_str = msg.price_dollars;
+		const price_changed_dec = decimalToBigInt(price_changed_str,4);
+		const volume_changed_str = msg.delta_fp;
+		const volume_changed_dec = decimalToBigInt(volume_changed_str,2);
+		const currentOrderbook = this.orderbooks.get(tkr);
+		const newList = [];
+
+		let found = false;
+		let currentOrderbookSide;
+
+		if (side === "yes") {
+			currentOrderbookSide = currentOrderbook.yes_dollars_fp;
+		} else if (side === "no") {
+			currentOrderbookSide = currentOrderbook.no_dollars_fp;
+		}
+
+
+		for (let i=0; i < currentOrderbookSide.length; i++ ) {
+			const existing_price_str = currentOrderbookSide[i][0]
+			const existing_volume_str = currentOrderbookSide[i][1]
+			const existing_price_dec = decimalToBigInt(existing_price_str,4);
+			const existing_volume_dec = decimalToBigInt(existing_volume_str,2);
+
+			if (price_changed_dec === existing_price_dec) {
+				if (found) {
+					throw new Error("found same price twice in orderbook");
+				}
+				found = true;
+				const new_volume_dec = existing_volume_dec + volume_changed_dec;
+
+				if (new_volume_dec > 0) {
+					const new_volume_str = bigIntToDecimal(new_volume_dec,2);
+					newList.push([existing_price_str,new_volume_str]);
+				} else if (new_volume_dec < 0) {
+					throw new Error("orderbook has negative volume");
+				}
+
+			} else if (!found && price_changed_dec < existing_price_dec) {
+				found = true;
+				newList.push([price_changed_str,volume_changed_str]);
+				newList.push([existing_price_str,existing_volume_str]);
+			} else {
+				newList.push([existing_price_str,existing_volume_str]);
+			}
+
+		}
+
+		if (!found) {
+			newList.push([price_changed_str,volume_changed_str]);
+		}
+
+		if (side === "yes") {
+			const itemRef = this.orderbooks.get(tkr);
+			itemRef.yes_dollars_fp = newList;
+		} else if (side === "no") {
+			const itemRef = this.orderbooks.get(tkr);
+			itemRef.no_dollars_fp = newList;
+		}
+
+		
+
+  }
+
+
+  processTick(currentTime: number) {
+		this.setCurrentTime(currentTime);
+		while (this.currentIndex < this.dataArray.length &&
+			this.currentTime >= this.dataArray[this.currentIndex].msg.ts_ms - this.timeOffset
+		) {
+			this.updateOrderbook(this.dataArray[this.currentIndex]);
+			this.currentIndex += 1;
+		}
+
+	}
 
 
 }

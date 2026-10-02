@@ -56,6 +56,9 @@ export default function Replayer() {
   useEffect(() => {
     const getResp = async () => {
       const resp = await window.electronAPI.processTick(totalMilliseconds);
+      if (resp) {
+        setCurrentOrderbooks(resp);
+      }
     }
     getResp();
 

@@ -17,7 +17,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu'; 
 import { resolveHtmlPath } from './util';
 import startAutoUpdates from './updates';
-import Backtester from './backtest';
+import {Backtester, topBook} from './backtest';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -152,6 +152,7 @@ ipcMain.handle("read-directory", async (_, dirPath) => {
 let filePath = '';
 let dataArray = [];
 let backtest: Backtester;
+let currentTopBooks: topBook;
 
 ipcMain.handle("read-json-file", async (_, newFilePath) => {
   dataArray = []; // Reset dataArray to empty before pushing onto it.
@@ -185,15 +186,58 @@ ipcMain.handle("read-json-file", async (_, newFilePath) => {
     });
   });
 
+  currentTopBooks = initialBooks;
   return initialBooks;
 });
 
 
+function topBooksEqual(a: topBook, b: topBook): boolean {
+  return (
+    a.best_yes_bid_dollars === b.best_yes_bid_dollars &&
+    a.best_yes_bid_volume === b.best_yes_bid_volume &&
+    a.best_yes_ask_dollars === b.best_yes_ask_dollars &&
+    a.best_yes_ask_volume === b.best_yes_ask_volume &&
+    a.best_no_bid_dollars === b.best_no_bid_dollars &&
+    a.best_no_bid_volume === b.best_no_bid_volume &&
+    a.best_no_ask_dollars === b.best_no_ask_dollars &&
+    a.best_no_ask_volume === b.best_no_ask_volume
+  );
+}
+
+function topBookMapsEqual(a: Map<string, topBook>,b: Map<string, topBook>): boolean {
+  if (a.size !== b.size) {
+    return false;
+  }
+
+  for (const [ticker, bookA] of a) {
+    const bookB = b.get(ticker);
+
+    if (!bookB) {
+      return false;
+    }
+
+    if (!topBooksEqual(bookA, bookB)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 ipcMain.handle("process-tick", async (_, tick) => {
-  // console.log(file);
-  // return "successful process-tick function call";
+  if (!backtest) {
+    return null;
+  }
 
+  backtest.processTick(tick);
+  const newTopBooks = backtest.getTopOrderbooks();
+
+  if (!topBookMapsEqual(newTopBooks,currentTopBooks)) {
+    currentTopBooks = newTopBooks;
+    return newTopBooks;
+  } else{
+    return null;
+  }
 
 
 });
