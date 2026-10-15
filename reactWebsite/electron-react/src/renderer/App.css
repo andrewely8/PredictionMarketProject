@@ -179,3 +179,218 @@ button:hover {
   font-size: 14px;
   padding: 5px;
 }
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button:disabled:hover {
+  background-color: white;
+}
+
+/* ------------------------------------------------------------------ shared panel content */
+
+.panelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 8px;
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 13px;
+  user-select: text;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.row button,
+.fileListItem button,
+.smallButton {
+  padding: 1px 8px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  color: #9fd3ff;
+  margin-top: 4px;
+}
+
+.muted {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+.warn {
+  color: #ffcf70;
+}
+
+.ok {
+  color: #8fe39b;
+}
+
+.bad {
+  color: #ff9a8f;
+}
+
+.mono {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.path {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.fileListItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+
+.fileListItem.selected {
+  background: rgba(159, 211, 255, 0.16);
+}
+
+.fileListItem .name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.textInput,
+.panelBody select,
+.panelBody textarea {
+  font-family: inherit;
+  font-size: 13px;
+  border-radius: 6px;
+  border: none;
+  padding: 2px 6px;
+}
+
+.panelBody input[type="checkbox"],
+.panelBody input[type="radio"] {
+  margin: 0 3px 0 0;
+}
+
+.dataTable {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+
+.dataTable th {
+  text-align: left;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dataTable td {
+  padding: 2px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+}
+
+.console {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  padding: 6px;
+  max-height: 180px;
+  overflow: auto;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.progressTrack {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.progressTrack > div {
+  height: 100%;
+  background: #9fd3ff;
+}
+
+.seekBar {
+  width: 100%;
+  accent-color: #9fd3ff;
+}
+
+/* ------------------------------------------------------------------ modal */
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalBody {
+  width: min(900px, 92vw);
+  max-height: 88vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(48, 56, 65, 1);
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 13px;
+  padding: 12px;
+  border-radius: 10px;
+  user-select: text;
+}
+
+.modalBody h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ menu */
+
+.dropdown-content button.menuItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: black;
+  padding: 2px 2px 2px 20px;
+  font-size: 14px;
+  border-radius: 3px;
+  background: transparent;
+}
+
+.dropdown-content button.menuItem:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-content button.menuItem:disabled {
+  color: #999;
+}

@@ -1,0 +1,260 @@
+/* Styles for AIResearchPanel only; every class is prefixed "air-" to avoid collisions. */
+
+.air-title {
+  width: 190px;
+}
+
+.air-root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 8px;
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  user-select: text;
+}
+
+.air-muted {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+.air-warn {
+  color: #ffcf70;
+}
+
+.air-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.air-files {
+  max-height: 120px;
+  overflow-y: auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 4px;
+}
+
+.air-file {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.air-history {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.air-msg {
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.air-user {
+  background: rgba(255, 255, 255, 0.08);
+  align-self: flex-end;
+  max-width: 90%;
+}
+
+.air-assistant {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.air-error {
+  background: rgba(180, 40, 40, 0.35);
+}
+
+.air-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.air-section {
+  margin-top: 6px;
+}
+
+.air-sectionTitle {
+  font-weight: 600;
+  color: #9fd3ff;
+}
+
+.air-section ul {
+  margin: 2px 0;
+  padding-left: 18px;
+}
+
+.air-artifact {
+  margin-top: 8px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.air-artifactHead {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.air-badge {
+  font-size: 11px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: rgba(159, 211, 255, 0.25);
+}
+
+.air-path {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.air-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.air-buttons button,
+.air-row button,
+.air-compose button,
+.air-run button {
+  padding: 2px 8px;
+}
+
+.air-run {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.air-run pre,
+.air-modal pre {
+  max-height: 220px;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  font-size: 11px;
+}
+
+.air-run-passed b { color: #8fe39b; }
+.air-run-failed b,
+.air-run-rejected b,
+.air-run-timeout b { color: #ff9a8f; }
+
+.air-stderr {
+  color: #ffb3a8;
+}
+
+.air-deleted {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.air-activity {
+  font-size: 12px;
+}
+
+.air-spinner {
+  color: #9fd3ff;
+}
+
+.air-tool-error {
+  color: #ffcf70;
+}
+
+.air-notice {
+  font-size: 12px;
+  color: #ffe9a8;
+}
+
+.air-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.air-compose textarea {
+  width: 100%;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 13px;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.air-compose button {
+  align-self: flex-end;
+}
+
+.air-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.air-modalBody {
+  width: min(900px, 90vw);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(48, 56, 65, 1);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  user-select: text;
+}
+
+.air-modalBody pre {
+  max-height: 75vh;
+  flex: 1;
+}
+
+/* Model selector (ModelSelector.jsx) */
+.air-model {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 4px;
+}
+
+.air-modelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.air-ok {
+  color: #8fe39b;
+}
+
+.air-progress {
+  height: 5px;
+  margin-top: 2px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.air-progress > div {
+  height: 100%;
+  background: #9fd3ff;
+}

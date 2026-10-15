@@ -27,6 +27,11 @@ module.exports = [
       '**/*.css.d.ts',
       '**/*.sass.d.ts',
       '**/*.scss.d.ts',
+      // Python engine: virtualenv, downloaded runtimes and AI-generated files
+      'engine/.venv/**',
+      'engine/runtime/**',
+      'engine/generated/**',
+      'NEW_FEATURE_BY_CLAUDE_CODE/**',
     ],
   },
   {

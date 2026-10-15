@@ -1,0 +1,26 @@
+# Kalshi Backtester engine. Install into engine/.venv (see the repository README).
+
+# service
+fastapi>=0.143
+uvicorn[standard]>=0.54        # includes websocket support for the simulator feed
+python-dotenv>=1.2             # optional engine/.env overrides
+
+# Kalshi + market data
+websockets>=15                 # live recording; also used by strategy files
+requests>=2.32                 # used by strategy files
+cryptography>=45               # Kalshi API-key request signing
+httpx>=0.28                    # public market search, local Ollama control, tests
+orjson>=3.10                   # fast .jsonl parsing
+numpy>=2.2                     # recordings in compact arrays, statistics, ML template
+
+# AI research assistant
+langchain>=1.4,<2              # create_agent tool-calling loop, middleware, tools
+langgraph>=1.2,<2              # agent runtime + conversation memory
+langsmith>=0.14                # optional tracing / evaluation
+langchain-anthropic>=1.7       # Claude (signed-in account)
+langchain-ollama>=1.1          # local Qwen via the packaged Ollama
+langchain-community>=0.4       # BM25Retriever
+rank-bm25>=0.2
+
+# tests
+pytest>=9

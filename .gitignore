@@ -1,4 +1,16 @@
+# Private: Kalshi API keys and recorded market data
 secret/
 collectedData/
+workspace/
+
 __pycache__/
-reactWebsite/electron-react/backendPython/collectedData
+.pytest_cache/
+
+# Engine: local settings, virtualenv, downloaded runtimes (Ollama, models, Anthropic CLI),
+# AI-generated files and optional .env overrides
+reactWebsite/electron-react/settings.local.json
+reactWebsite/electron-react/engine/.venv/
+reactWebsite/electron-react/engine/runtime/
+reactWebsite/electron-react/engine/generated/*
+!reactWebsite/electron-react/engine/generated/.gitkeep
+reactWebsite/electron-react/engine/.env
