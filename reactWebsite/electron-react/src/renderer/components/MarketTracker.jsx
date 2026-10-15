@@ -9,7 +9,7 @@ function EventTrackForm() {
   const [input, setInput] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [processInfo, setProcessInfo] = useState(null);
-  const [saveDirPath, setSaveDirPath] = useState("./backendPython/collectedData");
+  const [saveDirPath, setSaveDirPath] = useState("./backendPython/workspace");
   const [scheduleDisabled, setScheduleDisabled] = useState(false);
 
   function handleSubmit(e) {
@@ -47,6 +47,7 @@ function EventTrackForm() {
   function sendJson(msg) {
     window.electronAPI.sendToPython(msg);
   }
+
 
   return (
 
@@ -102,12 +103,23 @@ export default function MarketTracker() {
     newTrackedEvents.push(trackedEvents[-1]+1);
     setTrackedEvents(newTrackedEvents);
   }
+
+  function openBrowser(link) {
+    window.electronAPI.openExternalBrowser(link);
+  }
   
   return (
     <Panel className = "panel" collapsible minSize={200}>
       <div className = "panelTitleContainer">
         <div className = "panelTitle">Market Tracker</div>
         <div className = "MarketTrackerInteriorContainer">
+
+          <button 
+            style = {{display: "flex", margin: "5px"}}
+            onClick = {() => {openBrowser('https://pro.kalshi.com/workspace/markets?utm_campaign=pro_upsell&utm_medium=internal&utm_source=trading_portal&utm_content=navbar&pro_entrypoint=navbar')}}
+          >
+            Find Open Markets
+          </button>
 
           <span style = {{color: "white"}}>Enter Market Tickers as comma seperated list: </span>
           

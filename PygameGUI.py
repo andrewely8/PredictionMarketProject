@@ -9,7 +9,7 @@ font2 = pygame.font.SysFont('arial', 20)
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
-FILE_PATH_1 = "./collectedData/MLB/KXMLBGAME-26SEP051915NYYSD.jsonl"
+FILE_PATH_1 = "./collectedData/MLB/KXMLBGAME-26SEP012138NYYLAA.jsonl"
 
 loadingTitleSurface = font1.render(f"Loading", False, BLACK)
 screen.fill(WHITE)
@@ -88,5 +88,15 @@ while True:
 	if paused == -1:
 		currentTick += dt * replaySpeed
 	elif paused == 1:
-		print(game1.numUpdates)
+		pass
 	#currentTick = pygame.time.get_ticks()-timeAtLoad
+
+
+#c1: 0.46 YES team A wins
+#c2: 0.36 YES team B wins by 2 or more points
+#                         c1            c2                
+# team A wins big        1.00           0.00
+# team A wins narrow     1.00           0.00
+# team B wins            0.00           1.00
+#
+#

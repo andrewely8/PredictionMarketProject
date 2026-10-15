@@ -32,7 +32,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   readFile: (file_path) => ipcRenderer.invoke("read-json-file", file_path),
   processTick: (tick) => ipcRenderer.invoke("process-tick", tick),
   sendToPython: (msg) => ipcRenderer.send("python-message", msg),
-
-  
+  openExternalBrowser: (link) => ipcRenderer.send("open-browser",link),
+  runStrategy: (file_path) => ipcRenderer.send("run-python-strategy", file_path),
 });
 export type ElectronHandler = typeof electronHandler;

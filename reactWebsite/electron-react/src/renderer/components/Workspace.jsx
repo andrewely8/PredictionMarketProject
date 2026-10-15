@@ -22,10 +22,18 @@ function DataFile({fileName}) {
 
 
 function StrategyFile({fileName}) {
+  const Global = useGlobal();
+
+  function onTestClick() {
+    //let newFilePath = Global.workspaceDir + "/" + fileName
+    Global.setCurrentTestFile(fileName);
+    console.log(Global.currentTestFile);
+  };
+
   return (
     <div className="fileListItem">
       <span>{fileName}</span>
-      <button style = {{marginLeft: "5px"}}>replay</button>
+      <button style = {{marginLeft: "5px"}} onClick = {onTestClick}>test</button>
     </div>
   );
 }

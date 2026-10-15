@@ -26,6 +26,17 @@ export default function Replayer() {
   } = useStopwatch({ autoStart: false, interval: 1 });
 
 
+  function runStrategy() {
+    const stratFilepath = Global.workspaceDir + "/" + Global.currentTestFile
+      
+    const getResp = async () => { 
+      const resp = await window.electronAPI.runStrategy(stratFilepath);
+      console.log(resp);
+    }
+    getResp();
+    
+  }
+
   //TODO:
   // this file (replayer.jsx) controls a (the) timer.
   // every tick of the timer, it sends the tick to a
@@ -72,7 +83,12 @@ export default function Replayer() {
           <div className = "MarketTrackerInteriorContainer">
             <div style = {{flexDirection: "column"}}>
               <span style = {{color: "white", display: "flex"}}>Data File: {Global.currentReplayFile} </span>
-             
+              
+              <div style = {{display: "flex",flexDirection: "row"}}>
+                <span style = {{color: "white", display: "flex"}}>Strategy File: {Global.currentTestFile} </span>
+                <button onClick = {() => {runStrategy()}}>Run Strategy TEST</button>
+              </div>
+
               <div style = {{color: "white", display: "flex"}}>
                 <span style = {{marginRight : "10px"}}>Current Time: </span><span>{(hours <10) ? 0 : null}{hours}:{(minutes <10) ? 0 : null}{minutes}:{(seconds <10) ? 0 : null}{seconds}</span>
               </div>

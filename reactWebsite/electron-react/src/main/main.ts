@@ -152,12 +152,11 @@ ipcMain.handle("read-directory", async (_, dirPath) => {
 let filePath = '';
 let dataArray = [];
 let backtest: Backtester;
-let currentTopBooks: topBook;
+let currentTopBooks: Map<string, topBook>;
 
 ipcMain.handle("read-json-file", async (_, newFilePath) => {
   dataArray = []; // Reset dataArray to empty before pushing onto it.
   if (newFilePath.substr(newFilePath.length-4) === "null") {
-    console.log("no file path to load");
     return null;
   }
   
@@ -244,38 +243,88 @@ ipcMain.handle("process-tick", async (_, tick) => {
 
 
 
+let pythonProcessStrategy: ReturnType<typeof spawn> | null = null;
 
-let pythonProcess: ReturnType<typeof spawn> | null = null;
+function startPythonStrategy(filePath) {
+  if (pythonProcessStrategy) {
+    return;
+  }
 
-function startPython() {
+  pythonProcessStrategy = spawn("python", [filePath]);
 
-  if (pythonProcess) {
+  pythonProcessStrategy.stdout.on("data", (data) => {console.log(`Python: ${data}`)});
+  pythonProcessStrategy.stderr.on("data", (data) => {console.error("PYTHON ERROR:", data.toString());});
+  pythonProcessStrategy.on("close", () => {pythonProcessStrategy = null;});
+
+}
+
+
+let pythonProcessFastAPI: ReturnType<typeof spawn> | null = null;
+
+function startPythonFastAPI() {
+  if (pythonProcessFastAPI) {
+    return;
+  }
+
+  const dirPath = path.join(__dirname, "../../../../backendPython/kalshiApiSim");
+
+  pythonProcessFastAPI = spawn("python",["-m","uvicorn","main:app","--host", "127.0.0.1","--port","8000"],{cwd: dirPath});
+
+  console.log("NOTE: uvicorn writes succesful messages to stderr.")
+  pythonProcessFastAPI.stdout.on("data", (data) => {console.log(`Python: ${data}`)});
+  pythonProcessFastAPI.stderr.on("data", (data) => {console.error("PYTHON ERROR:", data.toString());});
+  pythonProcessFastAPI.on("close", () => {pythonProcessFastAPI = null;});
+
+}
+
+
+let pythonProcessCollectData: ReturnType<typeof spawn> | null = null;
+
+function startPythonCollectData() {
+
+  if (pythonProcessCollectData) {
     return;
   }
 
   const pythonPath = "python";
   const scriptPath = path.join(__dirname, "../../../../backendPython/collectMarketData.py");
 
-  pythonProcess = spawn(pythonPath,[scriptPath]);
+  pythonProcessCollectData = spawn(pythonPath,[scriptPath]);
 
-  pythonProcess.stdout.on("data", (data) => {console.log(`Python: ${data}`)});
-  pythonProcess.stderr.on("data", (data) => {console.error("PYTHON ERROR:", data.toString());});
-  pythonProcess.on("close", () => {pythonProcess = null;});
+  pythonProcessCollectData.stdout.on("data", (data) => {console.log(`Python: ${data}`)});
+  pythonProcessCollectData.stderr.on("data", (data) => {console.error("PYTHON ERROR:", data.toString());});
+  pythonProcessCollectData.on("close", () => {pythonProcessCollectData = null;});
 }
 
 
 
 app.on("before-quit", () => {
-  pythonProcess?.kill();
+  pythonProcessCollectData?.kill();
+  pythonProcessFastAPI?.kill();
+  pythonProcessStrategy?.kill();
 });
 
 
+
+ipcMain.on("run-python-strategy", async (_, filepath) => {
+  if (pythonProcessStrategy) {
+    pythonProcessStrategy.kill();
+    return;
+  }
+
+  startPythonStrategy(filepath);
+
+});
+
+
+
+
 ipcMain.on("python-message", (_, message) => {
-  if (!pythonProcess) {
+  if (!pythonProcessCollectData) {
     console.log("No python process to send to");
     return;
   }
-  pythonProcess.stdin.write(
+  pythonProcessCollectData.stdin.write(
     JSON.stringify(message) + "\n"
   );
 });
@@ -285,13 +334,17 @@ ipcMain.handle("open-devtools", async () => {
   mainWindow.webContents.openDevTools()
 });
 
+ipcMain.on("open-browser", (_,link) => {
+  shell.openExternal(link);
+})
 
 
 
 app
   .whenReady()
   .then(async () => {
-    startPython();
+    startPythonCollectData();
+    startPythonFastAPI();
     await createWindow();
     startAutoUpdates();
     app.on('activate', onActivate);

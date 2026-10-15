@@ -75,6 +75,13 @@ class MlbGame():
 		return topOfBook
 
 
+	def getTopOfBooks(self):
+		topOfBooks = {}
+		for ticker in self.marketsTracked:
+			topOfBooks[ticker] = self.getTopOfBook(ticker)
+		return topOfBooks
+
+
 	def getMarkets(self):
 		return self.marketsTracked
 
@@ -133,37 +140,87 @@ class MlbGame():
 		while time >= (self.data[self.currentDataIdx]["msg"]["ts_ms"]-self.absoluteTrackStartTime):
 			self.updateOrderbook(self.data[self.currentDataIdx])
 			self.currentDataIdx += 1
+			res = self.runStrategy()
+			if res:
+				print(res)
 
 
 	def getOrderBooks(self):
 		return self.currentOrderbooks
 
 
+	def runStrategy(self):
+		topOfBooks = self.getTopOfBooks()
+
+		mla = topOfBooks['KXMLBGAME-26SEP012138NYYLAA-NYY']
+		mlb = topOfBooks['KXMLBGAME-26SEP012138NYYLAA-LAA']
+
+		spa1 = topOfBooks['KXMLBSPREAD-26SEP012138NYYLAA-NYY2']
+		spa2 = topOfBooks['KXMLBSPREAD-26SEP012138NYYLAA-NYY3']
+
+		spb1 = topOfBooks['KXMLBSPREAD-26SEP012138NYYLAA-LAA2']
+		spb2 = topOfBooks['KXMLBSPREAD-26SEP012138NYYLAA-LAA3']
+
+		# NYY ML + synthetic SD +1.5
+		# synthetic SD +1.5 = NO on NYY -1.5
+		if (
+			mla['best_yes_ask_dollars']
+			+ spa1['best_no_ask_dollars']
+			< Decimal("1.00")
+		):
+			return "FOUND NYY ML / NYY -1.5 NO ARB"
+
+		# NYY ML + synthetic SD +2.5
+		if (
+			mla['best_yes_ask_dollars']
+			+ spa2['best_no_ask_dollars']
+			< Decimal("1.00")
+		):
+			return "FOUND NYY ML / NYY -2.5 NO ARB"
+
+		# SD ML + synthetic NYY +1.5
+		if (
+			mlb['best_yes_ask_dollars']
+			+ spb1['best_no_ask_dollars']
+			< Decimal("1.00")
+		):
+			return "FOUND SD ML / SD -1.5 NO ARB"
+
+		# SD ML + synthetic NYY +2.5
+		if (
+			mlb['best_yes_ask_dollars']
+			+ spb2['best_no_ask_dollars']
+			< Decimal("1.00")
+		):
+			return "FOUND SD ML / SD -2.5 NO ARB"
+
+		return None
+
 
 
 
 if __name__ == "__main__":
 	
-	FILE_PATH_1 = "./collectedData/MLB/KXMLBGAME-26SEP051915NYYSD.jsonl"
+	FILE_PATH_1 = "./collectedData/MLB/KXMLBGAME-26SEP012138NYYLAA.jsonl"
 
 	game1 = MlbGame(FILE_PATH_1)
 
 
 	# Test of MlbGame.updateOrderbook()
-	print("\n\n")
-	print(game1.currentOrderbooks['KXMLBGAME-26SEP051915NYYSD-NYY'])
+	# print("\n\n")
+	# print(game1.currentOrderbooks['KXMLBGAME-26SEP051915NYYSD-NYY'])
 	
-	testCases = [
-		{"type":"orderbook_delta","sid":1,"seq":1,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.4500","delta_fp":"-1437.00","side":"yes","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200096}},
-		{"type":"orderbook_delta","sid":1,"seq":2,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.2800","delta_fp":"143.00","side":"yes","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200099}},
-		{"type":"orderbook_delta","sid":1,"seq":3,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.4600","delta_fp":"437.00","side":"yes","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200110}},
-		{"type":"orderbook_delta","sid":1,"seq":4,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.2700","delta_fp":"137.00","side":"no","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200115}},
-		{"type":"orderbook_delta","sid":1,"seq":4,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.2300","delta_fp":"-6629.00","side":"no","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200125}},
-	]
+	# testCases = [
+	# 	{"type":"orderbook_delta","sid":1,"seq":1,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.4500","delta_fp":"-1437.00","side":"yes","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200096}},
+	# 	{"type":"orderbook_delta","sid":1,"seq":2,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.2800","delta_fp":"143.00","side":"yes","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200099}},
+	# 	{"type":"orderbook_delta","sid":1,"seq":3,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.4600","delta_fp":"437.00","side":"yes","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200110}},
+	# 	{"type":"orderbook_delta","sid":1,"seq":4,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.2700","delta_fp":"137.00","side":"no","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200115}},
+	# 	{"type":"orderbook_delta","sid":1,"seq":4,"msg":{"market_ticker":"KXMLBGAME-26SEP051915NYYSD-NYY","market_id":"11014e93-6b1c-4b0d-8f07-737a9108ee1b","price_dollars":"0.2300","delta_fp":"-6629.00","side":"no","ts":"2026-09-05T23:00:00.096819Z","ts_ms":1788649200125}},
+	# ]
 
-	for test in testCases:
-		print("\n")
-		game1.updateOrderbook(test)
-		print(game1.currentOrderbooks['KXMLBGAME-26SEP051915NYYSD-NYY'])
+	# for test in testCases:
+	# 	print("\n")
+	# 	game1.updateOrderbook(test)
+	# 	print(game1.currentOrderbooks['KXMLBGAME-26SEP051915NYYSD-NYY'])
 	
 	
