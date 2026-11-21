@@ -1,0 +1,22 @@
+{
+  "1": {
+    "market_tickers": "KXNCAAMBGAME-26NOV17ILLDUKE-DUKE",
+    "scheduled_ahead": "on",
+    "date_input": "11/18/2026",
+    "time_input": "9:00",
+    "time_ampm": "pm",
+    "save_dir": "./backend/workspace",
+    "iso_time": "2026-11-19T02:00:00.000Z",
+    "status": "scheduled"
+  },
+  "2": {
+    "market_tickers": "KXNCAAMBGAME-26NOV17ILLDUKE-ILL",
+    "scheduled_ahead": "off",
+    "date_input": "",
+    "time_input": "",
+    "time_ampm": "",
+    "save_dir": "./backend/workspace",
+    "iso_time": "2026-11-18T01:32:52.004Z",
+    "status": "starting"
+  }
+}

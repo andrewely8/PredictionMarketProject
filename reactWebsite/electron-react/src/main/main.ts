@@ -266,9 +266,9 @@ function startPythonFastAPI() {
     return;
   }
 
-  const dirPath = path.join(__dirname, "../../../../backendPython/kalshiApiSim");
+  const dirPath = path.join(__dirname, "../../../../backend/pythonFastAPI");
 
-  pythonProcessFastAPI = spawn("python",["-m","uvicorn","main:app","--host", "127.0.0.1","--port","8000"],{cwd: dirPath});
+  pythonProcessFastAPI = spawn("python",["-m","uvicorn","main:app","--host", "127.0.0.1","--port","8080"],{cwd: dirPath});
 
   console.log("NOTE: uvicorn writes succesful messages to stderr.")
   pythonProcessFastAPI.stdout.on("data", (data) => {console.log(`Python: ${data}`)});
@@ -278,56 +278,15 @@ function startPythonFastAPI() {
 }
 
 
-let pythonProcessCollectData: ReturnType<typeof spawn> | null = null;
-
-function startPythonCollectData() {
-
-  if (pythonProcessCollectData) {
-    return;
-  }
-
-  const pythonPath = "python";
-  const scriptPath = path.join(__dirname, "../../../../backendPython/collectMarketData.py");
-
-  pythonProcessCollectData = spawn(pythonPath,[scriptPath]);
-
-  pythonProcessCollectData.stdout.on("data", (data) => {console.log(`Python: ${data}`)});
-  pythonProcessCollectData.stderr.on("data", (data) => {console.error("PYTHON ERROR:", data.toString());});
-  pythonProcessCollectData.on("close", () => {pythonProcessCollectData = null;});
-}
-
-
-
-app.on("before-quit", () => {
-  pythonProcessCollectData?.kill();
-  pythonProcessFastAPI?.kill();
-  pythonProcessStrategy?.kill();
-});
-
-
 
 ipcMain.on("run-python-strategy", async (_, filepath) => {
   if (pythonProcessStrategy) {
     pythonProcessStrategy.kill();
     return;
   }
-
   startPythonStrategy(filepath);
-
 });
 
-
-
-
-ipcMain.on("python-message", (_, message) => {
-  if (!pythonProcessCollectData) {
-    console.log("No python process to send to");
-    return;
-  }
-  pythonProcessCollectData.stdin.write(
-    JSON.stringify(message) + "\n"
-  );
-});
 
 
 ipcMain.handle("open-devtools", async () => {
@@ -340,17 +299,41 @@ ipcMain.on("open-browser", (_,link) => {
 
 
 
+async function waitForBackend(): Promise<void> {
+  const url = "http://127.0.0.1:8080/health";
+
+  while (true) {
+    try {
+      const response = await fetch(url);
+
+      if (response.ok) {
+        console.log("FastAPI backend is ready!");
+        return;
+      }
+    } catch (error) {
+      console.log("waiting for FastAPI backend...")
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+}
+
+
+app.on("before-quit", () => {
+  pythonProcessFastAPI?.kill();
+  pythonProcessStrategy?.kill();
+});
+
 app
   .whenReady()
   .then(async () => {
-    startPythonCollectData();
     startPythonFastAPI();
+    await waitForBackend();
     await createWindow();
     startAutoUpdates();
     app.on('activate', onActivate);
   })
   .catch((error: unknown) => {
     reportWindowError(error);
-
     app.quit();
   });

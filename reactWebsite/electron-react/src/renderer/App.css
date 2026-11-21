@@ -179,3 +179,23 @@ button:hover {
   font-size: 14px;
   padding: 5px;
 }
+
+.eventTrackerForm {
+  border: 2px solid rgba(255, 255, 255, 0.20);
+  border-radius: 8px;
+  padding: 6px;
+  margin: 6px;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.warn {
+  color: #ffcf70;
+}
+
+.blueColorText {
+  color: #60A5FA;
+}
+
+.greenColorText {
+  color: #4ADE80;
+}
